@@ -58,9 +58,10 @@
         group: azureuser
     - name: Clone my Repository
       git:
-        repo: https://github.com/legendarsword/CloudVorlesung.git
+        repo: https://github.com/StefanStrack/CloudVorlesung
         dest: /home/azureuser/CloudVorlesung
         clone: yes
+        force: yes
         update: yes
     - name: start Portainer
       ansible.builtin.shell: docker-compose up -d
