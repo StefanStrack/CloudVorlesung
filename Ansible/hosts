@@ -1,5 +1,5 @@
 [azurecloud]
-hshcloudvm.westeurope.cloudapp.azure.com
+stefanstrackhsh.westeurope.cloudapp.azure.com
 
 [azurecloud:vars]
 ansible_port=22

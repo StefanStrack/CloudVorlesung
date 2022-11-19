@@ -29,7 +29,7 @@ resource "azurerm_public_ip" "my_terraform_public_ip" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Dynamic"
-  domain_name_label   = "hshcloudvm"
+  domain_name_label   = "stefanstrackhsh"
 }
 
 # Create Network Security Group and rule
@@ -180,6 +180,6 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "my_terraform_shutdown" 
   notification_settings {
     enabled = true
     time_in_minutes = "60"
-    email = "alexander.hampel@stud.hs-hannover.de"
+    email = "stefan.strack@stud.hs-hannover.de"
   }
 }

@@ -62,13 +62,6 @@
         dest: /home/azureuser/CloudVorlesung
         clone: yes
         update: yes
-    - name: Docker create Web-Network for Traefik
-      docker_network:
-        name: web 
-    - name: start Traefik
-      ansible.builtin.shell: docker-compose up -d
-      args:
-        chdir: CloudVorlesung/Traefik
     - name: start Portainer
       ansible.builtin.shell: docker-compose up -d
       args:

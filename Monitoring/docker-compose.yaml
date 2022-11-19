@@ -11,32 +11,13 @@ services:
       - 8082:9090
     volumes:
       - prometheus_data:/prometheus
-      - /media/PROMETHEUS/config.yaml:/etc/prometheus/prometheus.yml
-    user: "1000"
+      - /home/azureuser/CloudVorlesung/Monitoring/config.yaml:/etc/prometheus/prometheus.yml
+    user: "root"
     restart: always
     environment:
       TZ: ${TZ}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.prometheus.entrypoints=web"
-      - "traefik.http.routers.prometheus.rule=Host(`hsh-prometheus.legendars.de`)"
-      - "traefik.http.middlewares.prometheus-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.prometheus.middlewares=prometheus-https-redirect"
-      - "traefik.http.routers.prometheus-secure.entrypoints=websecure"
-      - "traefik.http.routers.prometheus-secure.rule=Host(`hsh-prometheus.legendars.de`)"
-      - "traefik.http.routers.prometheus-secure.tls=true"
-      - "traefik.http.routers.prometheus-secure.tls.certresolver=myresolver"
-      - "traefik.http.routers.prometheus-secure.service=prometheus"
-      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
-      - "traefik.docker.network=web"
     networks:
-      web:
-      frontend-mo:
-        aliases:
-          - prometheus
-      backend-mo:
-        aliases:
-          - prometheus
+      - default
 
   nodeexporter:
     image: prom/node-exporter:latest
@@ -59,9 +40,7 @@ services:
     #labels:
     #    com.centurylinklabs.watchtower.enable: "true"
     networks:
-      backend-mo:
-        aliases:
-          - nodeexporter
+      - default
     
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -82,9 +61,7 @@ services:
     #labels:
     #    com.centurylinklabs.watchtower.enable: "true"
     networks:
-      backend-mo:
-        aliases:
-          - cadvisor
+      - default
   
   grafana:
     image: grafana/grafana:latest
@@ -107,40 +84,9 @@ services:
     #  - GF_RENDERING_SERVER_URL=http://renderer:8081/render
     #  - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
     #  - GF_LOG_FILTERS=rendering:debug
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.grafana.entrypoints=web"
-      - "traefik.http.routers.grafana.rule=Host(`hsh-grafana.legendars.de`)"
-      - "traefik.http.middlewares.grafana-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.grafana.middlewares=grafana-https-redirect"
-      - "traefik.http.routers.grafana-secure.entrypoints=websecure"
-      - "traefik.http.routers.grafana-secure.rule=Host(`hsh-grafana.legendars.de`)"
-      - "traefik.http.routers.grafana-secure.tls=true"
-      - "traefik.http.routers.grafana-secure.tls.certresolver=myresolver"
-      - "traefik.http.routers.grafana-secure.service=grafana"
-      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
-      - "traefik.docker.network=web"
     networks:
-      web:
-      frontend-mo:
-        aliases:
-          - prometheus
-      backend-mo:
-        aliases:
-          - grafana
+      - default
 
 volumes:
   prometheus_data:
   grafana_data:
-
-networks:
-  web:
-    external: true      
-  frontend-mo:
-    driver: bridge
-    driver_opts:
-      com.docker.network.bridge.name: br-monitoringfe
-  backend-mo:
-    driver: bridge
-    driver_opts:
-      com.docker.network.bridge.name: br-monitoringbe
